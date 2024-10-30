@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product, Cart, and Admin Page</title>
+    <link rel="stylesheet" href="../css/shop.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
+        <div class="logo">SOMGAS</div>
+        <nav>
+          <a href="#">Home</a>
+          <a href="#">Shop</a>
+          <a href="#">Contact us</a>
+          <a href="#">Jobs</a>
+          <a href="admin.html">Admin</a>
+        </nav>
+        <div class="cart-icon">
+          <button id="cartBtn">🛒 0</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="product-container">
+      <div class="product-info">
+        <h1>Gas</h1>
+        <h2>$ 5.50</h2>
+        <h3>Cabir</h3>
+        <div class="options" id="productOptions">
+          <label
+            ><input
+              type="radio"
+              name="size"
+              value="3kg M"
+              data-price="5.50"
+              checked
+            />
+            3kg M - $5.50</label
+          ><br />
+          <label
+            ><input type="radio" name="size" value="6kg M" data-price="10.00" />
+            6kg M - $10.00</label
+          ><br />
+          <label
+            ><input
+              type="radio"
+              name="size"
+              value="11kg M"
+              data-price="18.70"
+            />
+            11kg M - $18.70</label
+          ><br />
+          <label
+            ><input
+              type="radio"
+              name="size"
+              value="13kg M"
+              data-price="22.00"
+            />
+            13kg M - $22.00</label
+          ><br />
+          <label
+            ><input
+              type="radio"
+              name="size"
+              value="17kg M"
+              data-price="29.00"
+            />
+            17kg M - $29.00</label
+          ><br />
+        </div>
+        <div class="quantity-container">
+          <button id="decreaseQty">-</button>
+          <input type="text" id="quantity" value="1" />
+          <button id="increaseQty">+</button>
+        </div>
+        <button id="addToCart">Add to Cart</button>
+        <p>
+          Terms and Conditions<br />30-day money-back guarantee<br />Shipping:
+          2-3 Business Days
+        </p>
+      </div>
+    </div>
+
+    <!-- Cart Pop-out Modal -->
+    <div id="cartModal" class="cart-modal">
+      <div class="cart-modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>Review Order</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody id="cartItems">
+            <!-- Cart items will be injected here by JavaScript -->
+          </tbody>
+        </table>
+        <div class="order-summary">
+          <h3>Order Total</h3>
+          <p>Subtotal: $<span id="subtotal">0.00</span></p>
+          <p>Taxes: $<span id="taxes">0.00</span></p>
+          <p>Total: $<span id="total">0.00</span></p>
+          <button id="checkoutBtn" class="checkout-button">
+            Process Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/shop.js"></script>
+  </body>
+</html>

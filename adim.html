@@ -1,0 +1,47 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="../css/admin.css" />
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
+        <div class="logo">SOMGAS Admin</div>
+        <nav>
+          <a href="index.html">Home</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="admin-container">
+      <h1>Admin Dashboard</h1>
+      <h2>Resolve Payments</h2>
+      <div id="pendingPayments">
+        <p>No pending payments currently.</p>
+      </div>
+      <h2>Manage Products</h2>
+      <form id="addProductForm">
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" required /><br />
+
+        <label for="productPrice">Price:</label>
+        <input type="number" id="productPrice" required /><br />
+
+        <label for="productSize">Size:</label>
+        <input type="text" id="productSize" required /><br />
+
+        <button type="button" onclick="addProduct()">Add Product</button>
+      </form>
+      <div id="productList">
+        <h3>Existing Products</h3>
+        <div id="existingProducts">
+          <!-- Existing products will be injected here by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
+  </body>
+</html>
