@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <title>Coocking gas Shop</title>
+    <style>
+      /* General body styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      /* Navbar styling */
+      .navbar {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* Cart icon styling */
+      .cart-icon {
+        font-size: 1.5em;
+        position: relative;
+        cursor: pointer;
+      }
+
+      /* Cart count badge styling */
+      .cart-icon .cart-count {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background-color: #ff5722;
+        color: #fff;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 0.8em;
+      }
+
+      /* Cards container styling */
+      .cards-container {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        flex-wrap: wrap;
+      }
+
+      /* Individual gas card styling */
+      .gas-card {
+        background-color: #fff;
+        padding: 20px;
+        margin: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      /* Hover effect for gas card */
+      .gas-card:hover {
+        transform: scale(1.05);
+      }
+
+      /* Gas details styling */
+      .gas-details {
+        margin: 20px;
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Cart controls styling */
+      .cart-controls {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        justify-content: center;
+      }
+
+      /* Buttons for cart controls */
+      .cart-controls button {
+        padding: 10px;
+        margin: 0 5px;
+        background-color: #ff5722;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      /* Hover effect for cart control buttons */
+      .cart-controls button:hover {
+        background-color: #e64a19;
+      }
+
+      /* Quantity input field styling */
+      #quantity {
+        width: 50px;
+        text-align: center;
+      }
+
+      /* Gas details container alignment */
+      .gas-details-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+      }
+
+      /* Modal styling for review order */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        z-index: 1000;
+        width: 400px;
+      }
+
+      /* Modal header styling */
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .fa-solid,
+      .fas {
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      /* Modal content table styling */
+      .modal-content table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+      }
+      .modal-content table,
+      .modal-content th,
+      .modal-content td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      .modal-content th {
+        background-color: #ff5722;
+        color: white;
+        text-align: center;
+      }
+      .modal-content td {
+        text-align: center;
+      }
+
+      /* Modal footer styling */
+      .modal-footer {
+        text-align: center;
+      }
+      .modal-footer button {
+        background-color: green;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      /* Close button styling */
+      .close {
+        cursor: pointer;
+        font-size: 1.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
+        <h1>Coocking gas</h1>
+        <div class="cart-icon" id="cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cart-count" class="cart-count">0</span>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div id="gas-cards-container" class="cards-container"></div>
+      <div class="gas-details-container">
+        <div
+          id="gas-details-container"
+          class="gas-details"
+          style="display: none"
+        >
+          <img id="selected-gas-image" src="" alt="Selected Gas" />
+          <h2 id="selected-gas-name">Gas</h2>
+          <p id="selected-gas-price">$ 0.00</p>
+          <div id="gas-options"></div>
+          <div class="cart-controls">
+            <button id="decrease-quantity">-</button>
+            <input type="number" id="quantity" value="1" min="1" />
+            <button id="increase-quantity">+</button>
+            <button id="add-to-cart" class="add-to-cart">Add to Cart</button>
+          </div>
+          <p id="terms">
+            Terms and Conditions<br />30-day money-back guarantee<br />Shipping:
+            2-3 Business Days
+          </p>
+        </div>
+      </div>
+    </main>
+    <div id="cart-modal" class="modal">
+      <div class="modal-header">
+        <h2>Review Order</h2>
+        <span class="close" id="close-modal">&times;</span>
+      </div>
+      <div class="modal-content">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody id="cart-items"></tbody>
+        </table>
+        <div id="order-summary">
+          <p>Subtotal: $<span id="subtotal">0.00</span></p>
+          <p>Taxes: $<span id="taxes">0.00</span></p>
+          <p>Total: $<span id="total">0.00</span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="checkout">Process Checkout</button>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Sample data for gas options
+        const gasOptionsData = [
+          { name: "3kg M", price: 5.5, image: "../images/2.png" },
+          { name: "6kg M", price: 10.0, image: "../images/8.png" },
+          { name: "11kg M", price: 18.7, image: "../images/11.png" },
+          { name: "13kg M", price: 22.0, image: "../images/33.png" },
+        ];
+
+        // Load cart from local storage
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartCountElement = document.getElementById("cart-count");
+        const gasCardsContainer = document.getElementById(
+          "gas-cards-container"
+        );
+        const gasDetailsContainer = document.getElementById(
+          "gas-details-container"
+        );
+        const gasOptionsContainer = document.getElementById("gas-options");
+        const quantityInput = document.getElementById("quantity");
+        const cartModal = document.getElementById("cart-modal");
+        const cartIcon = document.getElementById("cart-icon");
+        const cartItemsElement = document.getElementById("cart-items");
+
+        // Load a single gas card initially
+        await loadSingleGasCard();
+
+        // Event listener to increase quantity
+        document
+          .getElementById("increase-quantity")
+          .addEventListener("click", function () {
+            updateQuantity(1);
+          });
+
+        // Event listener to decrease quantity
+        document
+          .getElementById("decrease-quantity")
+          .addEventListener("click", function () {
+            updateQuantity(-1);
+          });
+
+        // Event listener to add item to cart
+        document
+          .getElementById("add-to-cart")
+          .addEventListener("click", function () {
+            addToCart();
+          });
+
+        // Event listener to show the cart modal
+        cartIcon.addEventListener("click", function () {
+          showCartModal();
+        });
+
+        // Event listener to close the cart modal
+        document
+          .getElementById("close-modal")
+          .addEventListener("click", function () {
+            cartModal.style.display = "none";
+          });
+
+        // Load the initial gas card
+        async function loadSingleGasCard() {
+          gasCardsContainer.innerHTML = "";
+          const option = gasOptionsData[0];
+          const card = document.createElement("div");
+          card.classList.add("gas-card");
+          card.innerHTML = `
+                    <img src="${option.image}" alt="${option.name}">
+                    <h3>${option.name}</h3>
+                    <p>Click to view cooking gases and their prices</p>
+                `;
+          card.addEventListener("click", function () {
+            gasDetailsContainer.style.display = "block";
+            gasCardsContainer.style.display = "none";
+            updateGasDetails(option.name, option.image, option.price);
+            loadGasOptions();
+          });
+          gasCardsContainer.appendChild(card);
+        }
+
+        // Load gas options dynamically for selection
+        function loadGasOptions() {
+          gasOptionsContainer.innerHTML = "";
+          gasOptionsData.forEach((option) => {
+            const label = document.createElement("label");
+            label.innerHTML = `<input type="radio" name="gas-size" value="${option.price}" data-name="${option.name}" data-image="${option.image}"> ${option.name} - $${option.price}`;
+            gasOptionsContainer.appendChild(label);
+          });
+          gasOptionsContainer.querySelector("input").checked = true;
+          updateGasDetails(
+            gasOptionsData[0].name,
+            gasOptionsData[0].image,
+            gasOptionsData[0].price
+          );
+
+          gasOptionsContainer.addEventListener("change", function (e) {
+            if (e.target && e.target.matches('input[name="gas-size"]')) {
+              const selectedOption = gasOptionsData.find(
+                (option) => option.price == e.target.value
+              );
+              updateGasDetails(
+                selectedOption.name,
+                selectedOption.image,
+                selectedOption.price
+              );
+            }
+          });
+        }
+
+        // Update gas details (name, image, price) dynamically
+        function updateGasDetails(name, image, price) {
+          document.getElementById("selected-gas-name").textContent = name;
+          document.getElementById("selected-gas-image").src = image;
+          document.getElementById("selected-gas-price").textContent =
+            "$ " + price.toFixed(2);
+        }
+
+        // Update the quantity input field
+        function updateQuantity(change) {
+          let quantity = parseInt(quantityInput.value);
+          quantity += change;
+          if (quantity < 1) quantity = 1;
+          quantityInput.value = quantity;
+        }
+
+        // Add the selected item to the cart
+        function addToCart() {
+          const selectedOption = document.querySelector(
+            'input[name="gas-size"]:checked'
+          );
+          const name = selectedOption.dataset.name;
+          const price = parseFloat(selectedOption.value);
+          const quantity = parseInt(quantityInput.value);
+
+          const existingItem = cart.find((item) => item.name === name);
+          if (existingItem) {
+            existingItem.quantity += quantity;
+          } else {
+            cart.push({ name, price, quantity });
+          }
+
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartCount();
+          alert(quantity + " item(s) added to cart.");
+        }
+
+        // Update the cart count badge
+        function updateCartCount() {
+          const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+          cartCountElement.textContent = totalCount;
+        }
+
+        // Show the cart modal with cart items and order summary
+        function showCartModal() {
+          cartItemsElement.innerHTML = "";
+          let subtotal = 0;
+
+          cart.forEach((item) => {
+            subtotal += item.price * item.quantity;
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>
+                            <button onclick="updateCartItem('${
+                              item.name
+                            }', -1)">-</button>
+                            ${item.quantity}
+                            <button onclick="updateCartItem('${
+                              item.name
+                            }', 1)">+</button>
+                        </td>
+                        <td>$ ${(item.price * item.quantity).toFixed(2)}</td>
+                        <td><button onclick="removeCartItem('${
+                          item.name
+                        }')"><i class="fas fa-trash"></i></button></td>
+                    `;
+            cartItemsElement.appendChild(row);
+          });
+
+          const taxes = subtotal * 0.05;
+          const total = subtotal + taxes;
+
+          document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+          document.getElementById("taxes").textContent = taxes.toFixed(2);
+          document.getElementById("total").textContent = total.toFixed(2);
+
+          cartModal.style.display = "block";
+        }
+
+        // Update the quantity of an item in the cart
+        window.updateCartItem = function (name, change) {
+          const item = cart.find((item) => item.name === name);
+          if (item) {
+            item.quantity += change;
+            if (item.quantity <= 0) {
+              cart = cart.filter((cartItem) => cartItem.name !== name);
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+            showCartModal();
+          }
+        };
+
+        // Remove an item from the cart
+        window.removeCartItem = function (name) {
+          cart = cart.filter((item) => item.name !== name);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartCount();
+          showCartModal();
+        };
+      });
+    </script>
+  </body>
+</html>
